@@ -41,3 +41,63 @@ function openCase() {
     document.getElementById("result").innerText = "Wygrałeś: " + winItem;
   }, 2000);
 }
+let balance = Number(localStorage.getItem("balance")) || 1000;
+
+function saveBalance() {
+  localStorage.setItem("balance", balance);
+  document.getElementById("balance").innerText = balance;
+}
+
+function getItem(caseData) {
+  let rand = Math.random() * 100;
+  let sum = 0;
+
+  for (let item of caseData.items) {
+    sum += item.chance;
+    if (rand <= sum) return item;
+  }
+}
+
+function openCase() {
+  const caseData = cases.basic;
+
+  if (balance < caseData.price) {
+    alert("Brak kasy!");
+    return;
+  }
+
+  balance -= caseData.price;
+  saveBalance();
+
+  const container = document.getElementById("items");
+  container.innerHTML = "";
+
+  let rollItems = [];
+
+  for (let i = 0; i < 50; i++) {
+    let item = getItem(caseData);
+    rollItems.push(item);
+
+    let div = document.createElement("div");
+    div.className = "item " + item.rarity;
+    div.innerHTML = `<img src="${item.img}" width="100">`;
+    container.appendChild(div);
+  }
+
+  const winIndex = 40;
+  const offset = winIndex * 160;
+
+  container.style.transform = `translateX(-${offset}px)`;
+
+  setTimeout(() => {
+    let winItem = rollItems[winIndex];
+    document.getElementById("result").innerText = winItem.name;
+
+    addToInventory(winItem);
+  }, 2500);
+}
+
+window.onload = () => {
+  saveBalance();
+  renderInventory();
+};
