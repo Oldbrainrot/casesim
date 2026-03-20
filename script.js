@@ -1,22 +1,43 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-  <meta charset="UTF-8">
-  <title>Case Opening</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+const itemsPool = [
+  {name: "Common Skin", rarity: "common", chance: 60},
+  {name: "Rare Skin", rarity: "rare", chance: 25},
+  {name: "Epic Skin", rarity: "epic", chance: 10},
+  {name: "Legendary Skin", rarity: "legendary", chance: 5},
+];
 
-<h1>🎁 Otwórz skrzynkę</h1>
+const itemsDiv = document.getElementById("items");
 
-<div class="case">
-  <div id="items"></div>
-</div>
+function getRandomItem() {
+  let rand = Math.random() * 100;
+  let sum = 0;
 
-<button onclick="openCase()">OTWÓRZ</button>
+  for (let item of itemsPool) {
+    sum += item.chance;
+    if (rand <= sum) return item;
+  }
+}
 
-<h2 id="result"></h2>
+function generateItems() {
+  itemsDiv.innerHTML = "";
+  for (let i = 0; i < 30; i++) {
+    let item = getRandomItem();
+    let div = document.createElement("div");
+    div.className = `item ${item.rarity}`;
+    div.innerText = item.name;
+    itemsDiv.appendChild(div);
+  }
+}
 
-<script src="script.js"></script>
-</body>
-</html>
+function openCase() {
+  generateItems();
+
+  const winningIndex = Math.floor(Math.random() * 30);
+  const offset = winningIndex * 160;
+
+  itemsDiv.style.transform = `translateX(-${offset}px)`;
+
+  setTimeout(() => {
+    const winItem = itemsDiv.children[winningIndex].innerText;
+    document.getElementById("result").innerText = "Wygrałeś: " + winItem;
+  }, 2000);
+}
