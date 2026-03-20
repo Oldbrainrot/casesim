@@ -101,3 +101,33 @@ window.onload = () => {
   saveBalance();
   renderInventory();
 };
+function upgradeItem() {
+  if (inventory.length === 0) {
+    alert("Brak itemów");
+    return;
+  }
+
+  let chance = Number(document.getElementById("upgradeChance").value);
+  if (!chance || chance <= 0 || chance > 100) {
+    alert("Zła szansa");
+    return;
+  }
+
+  let item = inventory.pop(); // bierze ostatni item
+  let roll = Math.random() * 100;
+
+  if (roll <= chance) {
+    let upgraded = {
+      name: "UPGRADED ITEM 🔥",
+      rarity: "legendary",
+      img: "images/knife.png"
+    };
+
+    addToInventory(upgraded);
+    document.getElementById("upgradeResult").innerText = "WIN!";
+  } else {
+    document.getElementById("upgradeResult").innerText = "LOSE...";
+  }
+
+  renderInventory();
+}
