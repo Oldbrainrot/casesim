@@ -35,3 +35,12 @@ button {
   font-size: 20px;
   cursor: pointer;
 }
+.legendary {
+  border: 2px solid gold;
+  box-shadow: 0 0 20px gold;
+}
+
+.epic {
+  border: 2px solid purple;
+  box-shadow: 0 0 10px purple;
+}
